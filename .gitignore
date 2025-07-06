@@ -1,13 +1,15 @@
-.vscode/settings.json
-*.json
-__vm/*
-*.vcxproj*
-.vs/*
-*.sln
-Debug/*
-Release/*
-debug.cfg
-esp32.svd
-src/plugins/*
-debug.svd
-z.*
+# PlatformIO build system
+.pio/
+.vscode/
+
+# OS clutter
+.DS_Store
+Thumbs.db
+
+# Compiled objects
+*.elf
+*.bin
+*.hex
+*.map
+*.o
+*.d

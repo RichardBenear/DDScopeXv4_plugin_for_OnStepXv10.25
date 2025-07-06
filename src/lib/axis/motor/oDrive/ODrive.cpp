@@ -58,7 +58,7 @@ ODriveMotor::ODriveMotor(uint8_t axisNumber, const ODriveDriverSettings *Setting
 bool ODriveMotor::init() {
   if (axisNumber < 1 || axisNumber > 2) return false;
 
-  if (axisNumber == 1) {
+  //if (axisNumber == 1) {
     pinModeEx(ODRIVE_RST_PIN, OUTPUT);
     digitalWriteEx(ODRIVE_RST_PIN, HIGH); // bring ODrive out of Reset
     delay(1000);  // allow time for ODrive to boot
@@ -70,7 +70,7 @@ bool ODriveMotor::init() {
       // .begin is done by the constructor
       VF("MSG:"); V(axisPrefix); VLF("CAN channel init");
     #endif
-  }
+  //}
 
   enable(false);
 
@@ -87,6 +87,7 @@ bool ODriveMotor::init() {
     return false;
   }
 
+  status.active = true;
   ready = true;
   return true;
 }
@@ -133,7 +134,7 @@ void ODriveMotor::enable(bool state) {
   
   #if ODRIVE_COMM_MODE == OD_UART 
   float timeout = 0.5;                        
-    if(!_oDriveDriver->run_state(axisNumber - 1, requestedState, false, timeout)) {
+    if(!_oDriveDriver->runState(axisNumber - 1, requestedState, false, timeout)) {
       VF("MSG:"); V(axisPrefix); VLF(" Power, closed loop control - command timeout!");
       return;
     }
@@ -176,7 +177,7 @@ void ODriveMotor::resetPositionSteps(long value) {
 
   // get ODrive position in fractionial Turns
   #if ODRIVE_COMM_MODE == OD_UART
-    oPosition = _oDriveDriver->GetPosition(axisNumber - 1)*TWO_PI*stepsPerMeasure; // axis1/2 are in steps per radian
+    oPosition = _oDriveDriver->getPosition(axisNumber - 1)*TWO_PI*stepsPerMeasure; // axis1/2 are in steps per radian
   #elif ODRIVE_COMM_MODE == OD_CAN
     oPosition = _oDriveDriver->GetPosition(axisNumber - 1)*TWO_PI*stepsPerMeasure; // axis1/2 are in steps per radian
   #endif

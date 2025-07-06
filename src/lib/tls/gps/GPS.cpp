@@ -30,6 +30,15 @@
 #include "../PPS.h"
 #include "../../tasks/OnTask.h"
 
+// The undefine is needed because PlatforIO/VSCode compiler has included Constants.h which defines
+// GPS = 5 but then TinyGPSPlus.h redefines GPS to '1' therefore it assigns 5 = '1' which is garbage.
+// The compiler generates a bunch of errors. The Arduino IDE apparently doesn't care about this.
+// There are only 3 places that GPS macro is used and they all occur before this include. One is in
+// Config.h, another in Validate.h and where it is defined in Constants.h
+#ifdef GPS
+#undef GPS
+#endif
+
 #include <TinyGPSPlus.h> // https://github.com/mikalhart/TinyGPSPlus/releases
 TinyGPSPlus gps;
 

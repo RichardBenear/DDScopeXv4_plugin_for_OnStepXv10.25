@@ -1,0 +1,276 @@
+// Local command processor: Flowchart
+// command → transmit() → recv_buffer → OnStep command processor →
+// processes cmd, writes reply → xmit_buffer → receive()
+void Display::serialRecvFlush() {
+  while (SERIAL_LOCAL.available() > 0)
+    SERIAL_LOCAL.read();
+}
+
+bool Display::processCmd(const char* cmd, char* response, long timeOutMs) {
+  if (!cmd || !response) return false;  // safeguard
+
+  SERIAL_LOCAL.setTimeout(timeOutMs);
+  serialRecvFlush();  // clear buffers
+  //while (SERIAL_LOCAL.available() > 0) SERIAL_LOCAL.read();
+  
+  SERIAL_LOCAL.transmit(cmd);
+  Y;
+
+  response[0] = 0;  // init output
+  bool noResponse = false;
+  bool shortResponse = false;
+
+  // === Command Type Analysis ===
+  if (cmd[0] == 6 && cmd[1] == 0) {
+    shortResponse = true;
+  }
+
+  if (cmd[0] == ':' || cmd[0] == ';') {
+    char c1 = cmd[1], c2 = cmd[2], c3 = cmd[3], c4 = cmd[4];
+
+    if (c1 == 'G') {
+      if (strchr("RDE", c2)) if (timeOutMs < 300) timeOutMs = 300;
+      if (c2 == 'X' && ((c3 == 'E' && c4 == 'E') || (c3 == '8' && c4 == '9')))
+        shortResponse = true;
+    } else if (c1 == 'M') {
+      if (strchr("ewnsg", c2)) noResponse = true;
+      if (strchr("ADNPS", c2)) shortResponse = true;
+    } else if (c1 == 'Q') {
+      if (strchr("#ewns", c2)) noResponse = true;
+    } else if (c1 == 'A') {
+      if (strchr("W123456789+", c2)) {
+        shortResponse = true;
+        if (timeOutMs < 1000) timeOutMs = 1000;
+      }
+    } else if (c1 == 'F' || c1 == 'f') {
+      if (strchr("123456", c2) && c3 != '#') {
+        if (strchr("+-QZHhF1234", c3)) noResponse = true;
+        if (strchr("Aapc", c3)) shortResponse = true;
+      } else {
+        if (strchr("+-QZHhF1234", c2)) noResponse = true;
+        if (strchr("Aapc", c2)) shortResponse = true;
+      }
+    } else if (c1 == 'r') {
+      if (strchr("+-PRFC<>Q1234", c2)) noResponse = true;
+      if (strchr("~S", c2)) shortResponse = true;
+    } else if (c1 == 'R') {
+      if (strchr("AEGCMS0123456789", c2)) noResponse = true;
+    } else if (c1 == 'S') {
+      if (strchr("CLSGtgMNOPrdhoTBX", c2)) shortResponse = true;
+    } else if (c1 == 'L') {
+      if (strchr("BNCDL!", c2)) noResponse = true;
+      if (strchr("o$W", c2)) {
+        shortResponse = true;
+        if (timeOutMs < 1000) timeOutMs = 1000;
+      }
+    } else if (c1 == 'B') {
+      if (strchr("+-", c2)) noResponse = true;
+    } else if (c1 == 'C') {
+      if (strchr("S", c2)) noResponse = true;
+    } else if (c1 == 'h') {
+      if (strchr("FC", c2)) {
+        noResponse = true;
+        if (timeOutMs < 1000) timeOutMs = 1000;
+      }
+      if (strchr("QPR", c2)) {
+        shortResponse = true;
+        if (timeOutMs < 300) timeOutMs = 300;
+      }
+    } else if (c1 == 'T') {
+      if (strchr("QR+-SLK", c2)) noResponse = true;
+      if (strchr("edrn", c2)) shortResponse = true;
+    } else if (c1 == 'U') {
+      noResponse = true;
+    } else if (c1 == 'W') {
+      if (c2 == 'R') {
+        if (strchr("+-", c3)) shortResponse = true;
+        else noResponse = true;
+      }
+      if (c2 == 'S') shortResponse = true;
+      if (strchr("0123", c2)) noResponse = true;
+    } else if (c1 == '$' && c2 == 'Q' && c3 == 'Z') {
+      if (strchr("+-Z/!", c4)) noResponse = true;
+    }
+
+    // Checksum override
+    if (cmd[0] == ';') {
+      noResponse = false;
+      shortResponse = false;
+    }
+  }
+  
+  // char reply[80] = "";
+  // char parameter[4] = "";
+  // bool supressFrame = false;
+  // bool numericReply = true;
+  // char mutableCommand[8]; 
+  // char exCmd[8] = "";
+  // strcpy(mutableCommand, cmd);  // Copy command to a mutable buffer
+
+  // // Extract command (drop the ':')
+  // exCmd[0] = mutableCommand[1];  // First command character
+  // if (mutableCommand[2] == '#') {  
+  //   exCmd[1] = '\0';  // 1-character command (e.g., ":Q#")
+  // } else {
+  //   exCmd[1] = mutableCommand[2];  // Second command character
+  //   if (mutableCommand[3] == '#') {
+  //     exCmd[2] = '\0';  // 2-character command (e.g., ":GA#")
+  //   } else { // cmd must have parameters
+  //     // Extract parameter (if any)
+  //     if (mutableCommand[3] == '#') {
+  //       parameter[0] = mutableCommand[3];
+  //       parameter[1] = '\0';  // Null-terminate parameter
+  //     } else {
+  //       if (mutableCommand[4] == '#') {
+  //         parameter[1] = mutableCommand[4];
+  //         parameter[2] = '\0';
+  //       }
+  //     }
+  //   }
+  // }
+
+  //CommandProcessor localProcessor(9600, 'L');
+  //localProcessor.poll();
+
+  //CommandError cmdError = processor.command(response, exCmd, parameter, &supressFrame, &numericReply);
+
+  // VF(cmdErrStr[cmdError]);
+  // // Latch new error and start timer
+  // if (cmdError != CE_NONE && latchedCmdErr == CE_NONE) {
+  //     latchedCmdErr = cmdError;
+  //     errorLatchStartTime = millis();
+  // }
+
+  // // Clear after duration
+  // if (latchedCmdErr != CE_NONE && millis() - errorLatchStartTime >= errorDisplayDuration) {
+  //     latchedCmdErr = cmdError;
+  // }
+  // if (currentScreen != XSTATUS_SCREEN) {
+  //   snprintf(cmdErrGlobal, sizeof(cmdErrGlobal), "Cmd Error: %.88s", cmdErrStr[latchedCmdErr]);
+  //   canvDisplayInsPrint.printLJ(3, 453, 314, C_HEIGHT + 2, cmdErrGlobal, false);
+  // }
+
+  //unsigned long timeout = millis() + (unsigned long)timeOutMs;
+  delay(10);
+  if (strcmp(cmd, ":GI#") == 0) {
+    if (wifiDisplay.wifiStaIpStr.startsWith("P:")) {
+      String ipOnly = wifiDisplay.wifiStaIpStr.substring(2);  // remove "P:"
+
+      snprintf(response, 32, "%s", ipOnly.c_str());
+      V("Got :GI#, sending:");
+      VL(response);
+    } else {
+      response[0] = '\0';  // Empty response if format invalid
+    }
+    return true;
+  }
+
+  if (noResponse) {
+    response[0] = 0;
+    return true;
+  } else if (shortResponse) {
+    response[0] = '\0';  // Clear response before use
+    const size_t maxLen = 79;
+    size_t len = 0;
+    unsigned long startTime = millis();
+
+    while (true) {
+      if (SERIAL_LOCAL.receiveAvailable() > 0) {
+        const char* recv = SERIAL_LOCAL.receive();
+        if (recv) {
+          size_t recvLen = strlen(recv);
+          if (len + recvLen < maxLen) {
+            strcat(response, recv);
+            len += recvLen;
+          } else {
+            // Prevent buffer overflow
+            strncat(response, recv, maxLen - len - 1);
+            response[maxLen] = '\0';
+            break;
+          }
+
+          // If response ends with '#', break
+          if (response[len - 1] == '#') break;
+        }
+      }
+
+      tasks.yield(1);  // Let other tasks run
+
+      // Optional safety timeout
+      if (millis() - startTime > 1500) {
+        response[0] = '?';
+        response[1] = '#';
+        response[2] = '\0';
+        // V("short response timeout=");
+        // VL(response);
+        return false;
+      }
+    }
+
+    // V("short response=");
+    // VL(response);
+    return true;
+  } else {
+    response[0] = '\0';  // Clear output buffer
+    unsigned long startTime = millis();
+    const size_t maxLen = 79;
+    size_t len = 0;
+
+    while (true) {
+      if (SERIAL_LOCAL.receiveAvailable() > 0) {
+        const char* recv = SERIAL_LOCAL.receive();
+        if (recv) {
+          size_t recvLen = strlen(recv);
+          if (len + recvLen < maxLen) {
+            strcat(response, recv);
+            len += recvLen;
+          } else {
+            // Prevent buffer overrun
+            strncat(response, recv, maxLen - len - 1);
+            response[maxLen] = '\0';
+            break;
+          }
+
+          // Check for end of command marker
+          if (response[len - 1] == '#') {
+            break;
+          }
+        }
+      }
+
+      tasks.yield(1);  // Let other tasks run
+
+      // Optional safety timeout (only if you suspect dropped bytes)
+      if (millis() - startTime > 3000) {
+        response[0] = '?';
+        response[1] = '\0';
+        return false;
+      }
+    }
+
+    //V("full response=");
+    //VL(response);
+    return true;
+  }
+}
+
+bool Display::commandBool(const char* command) {
+  char response[80] = "";
+  bool success = processCmd(command, response, cmdTimeout);
+  int l = strlen(response) - 1; if (l >= 0 && response[l] == '#') response[l] = 0;
+  if (!success) return false;
+  if (response[1] != 0) return false;
+  if (response[0] == '0') return false; else return true;
+}
+
+bool Display::commandWithReply(const char* command, char* response) {
+  bool success = processCmd(command, response, cmdTimeout);
+  int l = strlen(response) - 1;
+  if (l >= 0 && response[l] == '#') response[l] = 0;
+  return success;
+}
+
+bool Display::commandBlind(const char* command) {
+  char response[80] = "";
+  return processCmd(command, response, cmdTimeout);
+}

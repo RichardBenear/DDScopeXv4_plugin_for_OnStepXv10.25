@@ -160,9 +160,9 @@ bool Goto::command(char *reply, char *command, char *parameter, bool *supressFra
     //            Returns: sDD*MM# or sDD*MM'SS# (based on precision setting)
     // :GaH#      High precision
     //            Returns: sDD*MM'SS.SSS# (high precision)
-    if (command[1] == 'a' && (parameter[0] == 'H' || parameter[0] == 'l') && parameter[1] == 0) {
+    if (command[1] == 'a' && (parameter[0] == 'H' || parameter[0] == 'l')) {//&& parameter[1] == 0) {
       if (parameter[0] == 'H') precisionMode = PM_HIGHEST;
-      convert.doubleToHms(reply, radToDeg(gotoTarget.a), false, precisionMode);
+      convert.doubleToHms(reply, radToDeg(gotoTarget.a), true, precisionMode);
       *numericReply = false;
     } else
 

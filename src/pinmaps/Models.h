@@ -87,6 +87,10 @@
   #define PINMAP_STR "MaxSTM v3"
   #include "Pins.MaxSTM.h"
 #endif
+#if PINMAP == DDScopeX
+  #define PINMAP_STR "DDScopeX"
+  #include "Pins.DDScopeX.h"
+#endif
 #ifndef PINMAP_STR
   #define PINMAP_STR "Unknown"
 #endif

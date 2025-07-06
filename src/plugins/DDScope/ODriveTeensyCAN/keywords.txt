@@ -1,0 +1,48 @@
+#############################
+#	Data Types - KEYWORD1	#
+#############################
+
+
+
+#############################
+#	Functions - KEYWORD2	#
+#############################
+
+Heartbeat	       KEYWORD1
+SetAxisNodeId      KEYWORD1
+SetControllerModes     KEYWORD1
+SetTrajVelLimit     KEYWORD1
+SetTrajAccelLimits  KEYWORD1
+SetTrajInertia      KEYWORD1
+SetPosition	KEYWORD1
+SetVelocity	KEYWORD1
+SetTorque	KEYWORD1
+GetPosition	KEYWORD1
+GetVelocity	KEYWORD1
+GetEncoderShadowCount  KEYWORD1
+GetEncoderCountInCPR   KEYWORD1
+GetEncoderShadowCount  KEYWORD1
+GetEncoderCountInCPR   KEYWORD1
+GetIqSetpoint          KEYWORD1
+GetIqMeasured          KEYWORD1
+GetSensorlessPosition  KEYWORD1
+GetSensorlessVelocity  KEYWORD1
+GetMotorError	KEYWORD1
+GetEncoderError	KEYWORD1
+GetAxisError	KEYWORD1
+GetCurrentState	KEYWORD1
+GetVbusVoltage  KEYWORD1
+GetADCVoltage	KEYWORD1
+Estop           KEYWORD1
+StartAnticogging  KEYWORD1
+RebootOdrive    KEYWORD1
+ClearErrors     KEYWORD1
+RunState	    KEYWORD1
+
+
+#############################
+#	Instances - KEYWORD2	#
+#############################
+
+ODriveTeensyCAN	KEYWORD2
+

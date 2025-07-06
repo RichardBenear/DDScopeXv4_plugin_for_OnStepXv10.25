@@ -102,6 +102,13 @@
 #define KTECH                       201    // KTech CAN driver (axis 1 and 2 only)
 #define MOTOR_DRIVER_LAST           201
 
+// ODrive communication modes
+#define OD_COMM_FIRST               300
+#define OD_UART                     301    // ODrive uses Serial
+#define OD_CAN                      302    // ODrive uses CAN
+#define OD_I2C                      303    // ODrive uses I2C
+#define OD_COMM_LAST                303
+
 // servo encoder (must match Encoder library)
 #define ENC_FIRST                   1
 #define AB                          1      // AB quadrature encoder

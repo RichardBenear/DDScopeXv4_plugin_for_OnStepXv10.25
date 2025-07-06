@@ -26,19 +26,19 @@ void Sound::init() {
 #endif
 
 void Sound::alert() {
-  if (ready && enabled) {
+  if (ready && enabled) { VL("alert");
     #if STATUS_BUZZER == ON
       digitalWriteEx(STATUS_BUZZER_PIN, STATUS_BUZZER_ON_STATE);
       if (_buzzerHandle) tasks.remove(_buzzerHandle);
       _buzzerHandle = tasks.add(1000, 0, false, 6, buzzerOff);
     #endif
     #if STATUS_BUZZER >= 0
-      tone(STATUS_BUZZER_PIN, STATUS_BUZZER, 1000);
+      tone(STATUS_BUZZER_PIN, STATUS_BUZZER, 1002);
     #endif
   }
 }
 
-void Sound::beep() {
+void Sound::beep() { VL("beep");
   if (ready && enabled) {
     #if STATUS_BUZZER == ON
       digitalWriteEx(STATUS_BUZZER_PIN, STATUS_BUZZER_ON_STATE);
@@ -52,7 +52,7 @@ void Sound::beep() {
 }
 
 void Sound::click() {
-  if (ready && enabled) {
+  if (ready && enabled) { VL("click");
     #if STATUS_BUZZER == ON
       digitalWriteEx(STATUS_BUZZER_PIN, STATUS_BUZZER_ON_STATE);
       if (_buzzerHandle) tasks.remove(_buzzerHandle);
