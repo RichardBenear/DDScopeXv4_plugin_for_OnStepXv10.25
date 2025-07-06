@@ -1,0 +1,10 @@
+magick montage ^
+  HomeDusk.png HomeDay.png HomeNight.png Guide.png ^
+  Catalogs.png GoTo.png Align.png Settings.png Focuser.png ^
+  ODrive.png XSettings.png Stars.png Messier.png ^
+  Caldwell.png Herschel.png SelectIC.png Treasure.png ^
+  Planets.png User.png null: ^
+  -tile 4x5 ^
+  -geometry 320x480+2+2 ^
+  -background "#202020" ^
+  combined_images.png
