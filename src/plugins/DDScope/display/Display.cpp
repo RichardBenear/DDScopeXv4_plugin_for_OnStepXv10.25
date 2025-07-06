@@ -109,7 +109,7 @@ void Display::init(const char *fwName, int fwMajor, int fwMinor) {
            "Plugin FW Version:%s: %d.%d",
            fwName, fwMajor, fwMinor);
 
-  V("MSG:"); VLF(ddscopeVersionStr);  // Optional debug print
+  V("MSG: "); VLF(ddscopeVersionStr);  // Optional debug print
 
   VLF("MSG: Display, started"); 
   tft.begin(); delay(1);
@@ -126,6 +126,10 @@ void Display::init(const char *fwName, int fwMajor, int fwMinor) {
   Y;
   commandBool(":SMHome#"); // Set Site 0 name "Home"
   Y;
+  // NOTE: OnStep compile time ordering problem when using VSCode instead of Arduino.
+  // In Sound.h, bool enabled = STATUS_BUZZER_DEFAULT == ON;  never evaluates to true
+  // because it must be overwritten by the value in Config.defaults.h at a later time.
+  commandBool(":SX97,1#"); // Turn on Buzzer
 
   // Start Display update task
   // Update the currently selected screen status
@@ -500,7 +504,7 @@ void Display::showOnStepCmdErr() {
   // Display message
   char errStr[128];
   snprintf(errStr, sizeof(errStr), "Command Error: %s", displayedErr);
-  canvDisplayInsPrint.printLJ(3, 451, 314, C_HEIGHT + 2, errStr, false);
+  canvDisplayInsPrint.printLJ(3, 453, 314, C_HEIGHT + 2, errStr, false);
 }
 
 // ========== OnStep General Errors =============
