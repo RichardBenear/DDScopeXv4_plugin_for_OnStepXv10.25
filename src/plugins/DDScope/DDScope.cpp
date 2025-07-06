@@ -126,17 +126,17 @@ void DDScope::init() {
 }
 
 bool DDScope::command(char *reply, char *command, char *parameter, bool *supressFrame, bool *numericReply, CommandError *commandError) {
-
+  
   // Command used to pass the IP Address of the Wifi Display/Mirror controller to the OLED Display which is controlled by the ESP32C3
   //
   // :GI#       Get WiFi Display/Mirror IP Address
-  //            Returns: 192.168.xxx.xxx
+  //            Returns: e.g. 192.168.xxx.xxx
   if (command[0] == 'G' && command[1] == 'I') {
     if (wifiDisplay.wifiStaIpStr.startsWith("P:")) {
       String ipOnly = wifiDisplay.wifiStaIpStr.substring(2);  // remove "P:"
   
       snprintf(reply, 32, "%s", ipOnly.c_str());  // Write result to reply
-      V("Got :GI#, sending:"); VL(reply);
+      V("Command :GI#, sending:"); VL(reply);
       *numericReply = false;
       return false;
     } else {
