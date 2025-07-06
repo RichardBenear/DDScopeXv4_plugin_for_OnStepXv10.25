@@ -222,8 +222,7 @@ void SettingsScreen::setProcessNumPadButton() {
       TtextIndex++;
       if (TtextIndex == 2 || TtextIndex == 5) { // these positions are where the ':'s are
         tft.setCursor(TXT_FIELD_X+TtextIndex*CHAR_WIDTH, TXT_FIELD_Y);
-        //tft.print(':'); 
-        tft.print(Ttext[TtextIndex]); 
+        tft.print(':'); 
         TtextIndex++;
       }
     }
@@ -236,8 +235,7 @@ void SettingsScreen::setProcessNumPadButton() {
       DtextIndex++;
       if (DtextIndex == 2 || DtextIndex == 5) {
         tft.setCursor(TXT_FIELD_X+DtextIndex*CHAR_WIDTH, TXT_FIELD_Y+TXT_SPACING_Y);
-        //tft.print('/'); 
-        tft.print(Dtext[DtextIndex]); 
+        tft.print('/'); 
         DtextIndex++;
       }
     }
@@ -594,16 +592,15 @@ bool SettingsScreen::touchPoll(uint16_t px, uint16_t py) {
     char sCmd[16] = "";
     if (Tselect) {
       // Set Local Time :SL[HH:MM:SS]# 24Hr format
-      //VL(Ttext[0]);VL(Ttext[1]);VL(Ttext[2]);VL(Ttext[3]);VL(Ttext[4]);VL(Ttext[5]);
-      sprintf(sCmd, ":SL%c%c%c%c%c%c%c%c#", Ttext[0], Ttext[1], Ttext[2], Ttext[3], Ttext[4], Ttext[5], Ttext[6], Ttext[7]);
+      sprintf(sCmd, ":SL%c%c:%c%c:%c%c#", Ttext[0], Ttext[1], Ttext[3], Ttext[4], Ttext[6], Ttext[7]);
       if (!commandBool(sCmd)) {
         SERIAL_DEBUG.printf("ERR: Setting Local Time = %s\n", sCmd);
       } 
     } 
 
-    // Local Date
-    if (Dselect) { // :SC[MM/DD/YY]# 
-      sprintf(sCmd, ":SC%c%c%c%c%c%c%c%c#", Dtext[0], Dtext[1], Dtext[2], Dtext[3], Dtext[4], Dtext[5], Dtext[6], Dtext[7]);
+    // Local Date  :SC[MM/DD/YY]# 
+    if (Dselect) { 
+      sprintf(sCmd, ":SC%c%c/%c%c/%c%c#", Dtext[0], Dtext[1], Dtext[3], Dtext[4], Dtext[6], Dtext[7]);
       if (!commandBool(sCmd)) {
         SERIAL_DEBUG.printf("ERR: Setting Local Date = %s\n", sCmd);
       } 
