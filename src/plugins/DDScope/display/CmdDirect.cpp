@@ -188,7 +188,7 @@ bool CmdDirect::processCommand(const char* cmd, char* response) {
     strcat(response,"#");
   }
   
-  VF("MSG: cmdDirect="); V(extractedCmd); V(parameter); VF(", reply = "); V(response);
+  //VF("MSG: cmdDirect="); V(extractedCmd); V(parameter); VF(", reply = "); V(response);
 
   if (cmdError > CD_0) {
     if (strstr(extractedCmd, "GX") && strstr(parameter, "89")) {
@@ -197,7 +197,7 @@ bool CmdDirect::processCommand(const char* cmd, char* response) {
     lastCmdError = cmdError;
     V(", "); VL(cmdErrorStr[lastCmdError]);
   } else {
-    VL(", None");
+    //VL(", None");
   }
 
   if (noResponse) {
