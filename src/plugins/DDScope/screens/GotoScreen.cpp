@@ -109,7 +109,6 @@ void GotoScreen::draw() {
 
   drawCommonStatusLabels();
   updateGotoButtons();
-  //showOnStepCmdErr(); // show error bar
 
   RAtextIndex = 0; 
   DECtextIndex = 0; 
@@ -139,7 +138,6 @@ void GotoScreen::draw() {
   tft.fillRect(TEXT_FIELD_X, TEXT_FIELD_Y+TEXT_SPACING_Y+CUSTOM_FONT_OFFSET, TEXT_FIELD_WIDTH, TEXT_FIELD_HEIGHT-9,  butBackground);
   
   updateCommonStatus();
-  showGpsStatus();
   #ifdef ENABLE_TFT_MIRROR
   wifiDisplay.enableScreenCapture(false);
   wifiDisplay.sendFrameToEsp(FRAME_TYPE_DEF);

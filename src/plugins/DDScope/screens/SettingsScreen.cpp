@@ -107,7 +107,6 @@ void SettingsScreen::draw() {
   tft.setFont(&Inconsolata_Bold8pt7b);
   drawCommonStatusLabels(); // status common to many pages
   updateSettingsButtons();
-  //showOnStepCmdErr(); // show error bar
 
   TtextIndex = 0; 
   DtextIndex = 0; 
@@ -158,7 +157,6 @@ void SettingsScreen::draw() {
   tft.fillRect(TXT_FIELD_X, TXT_FIELD_Y+TXT_SPACING_Y*4+CUSTOM_FONT_OFFSET, TXT_FIELD_WIDTH, TXT_FIELD_HEIGHT, butBackground);
 
   updateCommonStatus();
-  showGpsStatus();
   updateSettingsStatus();
   #ifdef ENABLE_TFT_MIRROR
   wifiDisplay.enableScreenCapture(false);

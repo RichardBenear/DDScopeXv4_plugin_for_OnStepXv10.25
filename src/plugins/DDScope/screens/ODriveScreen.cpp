@@ -125,7 +125,6 @@ void ODriveScreen::draw() {
   updateOdriveStatus();
   showGains();
   showODriveErrors();
-  showGpsStatus();
 #ifdef ENABLE_TFT_MIRROR
   wifiDisplay.enableScreenCapture(false);
   wifiDisplay.sendFrameToEsp(FRAME_TYPE_DEF);

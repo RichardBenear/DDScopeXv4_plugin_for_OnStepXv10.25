@@ -106,7 +106,6 @@ void DCFocuserScreen::draw() {
   tft.setFont(&Inconsolata_Bold8pt7b);
   drawCommonStatusLabels();
   updateFocuserButtons();
-  //showOnStepCmdErr(); // show error bar
   
   int y_offset = 0;
 

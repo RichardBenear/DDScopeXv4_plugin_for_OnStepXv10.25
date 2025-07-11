@@ -90,10 +90,8 @@ void GuideScreen::draw() {
 
   drawCommonStatusLabels();
   updateGuideButtons();
-  //showOnStepCmdErr(); // show error bar
 
   updateCommonStatus();
-  showGpsStatus();
   updateGuideStatus();
   #ifdef ENABLE_TFT_MIRROR
   wifiDisplay.enableScreenCapture(false);

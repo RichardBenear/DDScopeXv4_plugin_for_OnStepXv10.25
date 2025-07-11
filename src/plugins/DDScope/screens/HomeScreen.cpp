@@ -16,11 +16,11 @@
 #endif
 
 // Column 1 Home Screen
-#define COL1_LABELS_X            3
+#define COL1_LABELS_X            5
 #define COL1_LABELS_Y            182
 #define COL1_LABEL_SPACING       21
 #define COL1_DATA_BOXSIZE_X      70
-#define COL1_DATA_X              84
+#define COL1_DATA_X              82
 #define COL1_DATA_Y              COL1_LABELS_Y
 
 // Column 2 Home Screen
@@ -35,7 +35,7 @@
 // Buttons for actions that are not page selections
 #define ACTION_BOXSIZE_X         100 
 #define ACTION_BOXSIZE_Y         36 
-#define ACTION_COL_1_X           3 
+#define ACTION_COL_1_X           6 
 #define ACTION_COL_1_Y           324
 #define ACTION_COL_2_X           ACTION_COL_1_X+ACTION_BOXSIZE_X+4
 #define ACTION_COL_2_Y           ACTION_COL_1_Y
@@ -105,6 +105,8 @@ Button homeButton(
 // Canvas Print object Custom Font
 CanvasPrint canvHomeInsPrint(&Inconsolata_Bold8pt7b);
 
+uint8_t extern fan_icon[];
+
 // ===============================================
 // ======= Draw Initial content of HOME PAGE =====
 // ===============================================
@@ -124,7 +126,6 @@ void HomeScreen::draw() {
   tft.drawFastVLine(TFTWIDTH/2, 172, 141, textColor);
   
   // Draw the FAN Icon bitmap
-  uint8_t extern fan_icon[];
   tft.drawBitmap(7, 7, fan_icon, 30, 30,  butBackground, butOutline);
 
   // ====== Draw Home Screen Status Text ===========
@@ -150,11 +151,8 @@ void HomeScreen::draw() {
   // draw and initialize buttons, labels, and status upon entry to this screen
   updateHomeButtons();
   drawCommonStatusLabels();
-  //showOnStepCmdErr(); // show error bar
-  //getOnStepGenErr(); // and the next one
   updateHomeStatus();
   updateCommonStatus();
-  showGpsStatus();
   
   #ifdef ENABLE_TFT_MIRROR
   wifiDisplay.enableScreenCapture(false); // stop first
@@ -559,9 +557,11 @@ bool HomeScreen::touchPoll(int16_t px, int16_t py) {
     if (!fanOn) {
       digitalWrite(FAN_ON_PIN, HIGH);
       fanOn = true;
+      tft.drawBitmap(7, 7, fan_icon, 30, 30,  butBackground, GREENYELLOW);
     } else {
       digitalWrite(FAN_ON_PIN, LOW);
       fanOn = false;
+      tft.drawBitmap(7, 7, fan_icon, 30, 30,  butBackground, butOutline);
     }
     return false;
   }

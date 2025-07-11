@@ -108,9 +108,7 @@ void MoreScreen::draw() {
 
   drawCommonStatusLabels(); // Common status at top of most screens
   updateMoreButtons(); // Draw initial More Page Buttons; false=no redraw
-  //showOnStepCmdErr(); // show error bar
   updateCommonStatus();
-  showGpsStatus();
   site.updateLocation();
 
   // Serial.println(moreScreen.catSelectionStr1);
