@@ -254,10 +254,9 @@ class Display {
 
   private:
     char lastCmdErr[4] = "";
-    bool firstGPS = true;
     bool firstRTC = true;
     bool trackLedOn = false;
-    bool flash = false;
+    bool flash = true;
 };
 
 extern Display display;

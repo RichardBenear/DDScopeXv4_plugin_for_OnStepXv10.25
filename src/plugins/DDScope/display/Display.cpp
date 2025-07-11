@@ -55,7 +55,7 @@
 #define COM_COL2_LABELS_X       170
 #define COM_COL2_DATA_X         235
 
-// copied from website plugin String_en.h
+// the following defines are copied from OnStep Website Plugin String_en.h
 // general (background) errors
 #define L_GE_NONE "None"
 #define L_GE_MOTOR_FAULT "Motor/driver fault"
@@ -126,9 +126,9 @@ void Display::init(const char *fwName, int fwMajor, int fwMinor) {
   Y;
   commandBool(":SMHome#"); // Set Site 0 name "Home"
   Y;
-  // NOTE: OnStep compile time ordering problem when using VSCode instead of Arduino.
+  // NOTE: OnStep compile time ordering problem when using VSCode instead of Arduino IDE.
   // In Sound.h, bool enabled = STATUS_BUZZER_DEFAULT == ON;  never evaluates to true
-  // because it must be overwritten by the value in Config.defaults.h at a later time.
+  // because it is overwritten by the value in Config.defaults.h at a later time.
   commandBool(":SX97,1#"); // Turn on Buzzer
 
   // Start Display update task
@@ -156,6 +156,7 @@ void Display::sdInit() {
     return;
   } 
 
+  // NOTE: decided that this start page wasn't needed for now
   // Draw Start Page of NGC 1566 bitmap
   // tft.fillScreen(pgBackground); 
   // tft.setTextColor(textColor);
@@ -256,6 +257,7 @@ void Display::refreshButtons() {
   }
 
   if (buttonPressed) {
+    // NOTE: decided not to use this but left it here in case change of mind
     //VLF("A button was pressed.");
     //showOnStepCmdErr();
   }
@@ -389,7 +391,7 @@ void Display::updateBatVoltage(int axis) {
   previousBatVoltage = currentBatVoltage;
 }
 
-// Define Hidden Motors OFF button
+// Define a Hidden Motors OFF button
 // Hidden button is GPS ICON area and will turn off current to both Motors
 // This hidden area is on ALL screens for Saftey in case of mount collision
 void Display::motorsOff(uint16_t px, uint16_t py) {
@@ -412,9 +414,8 @@ void Display::showGpsStatus() {
     currentScreen == XSTATUS_SCREEN ||
     currentScreen == TREASURE_SCREEN) return;
   uint8_t extern gps_icon[];
-  if (site.isDateTimeReady()) {
+  if (!site.isDateTimeReady()) {
   //if (commandBool(":GX89#")) { // return 1 = NOT READY, NOTE: it's irritating that it shows Error Unknown
-    firstGPS = true; // turn on One-shot trigger
     if (!flash) {
       flash = true;
       tft.drawBitmap(278, 3, gps_icon, 37, 37, BLACK, butBackground);
