@@ -72,7 +72,7 @@
 
 #define TDU_DISP_X           156
 #define TDU_DISP_Y           355
-#define TDU_OFFSET_X         80
+#define TDU_OFFSET_X         83
 #define TDU_OFFSET_Y         20
 
 #define CUSTOM_FONT_OFFSET  -TXT_FIELD_HEIGHT+2
@@ -127,15 +127,15 @@ void SettingsScreen::draw() {
   tft.print("Site Lon(sDDD.D):");
 
   tft.setCursor(TDU_DISP_X, TDU_DISP_Y);
-  tft.print("     Time:");
+  tft.print("      Time:");
   tft.setCursor(TDU_DISP_X, TDU_DISP_Y+TDU_OFFSET_Y);
-  tft.print("     Date:");
+  tft.print("      Date:");
   tft.setCursor(TDU_DISP_X, TDU_DISP_Y+TDU_OFFSET_Y*2);
-  tft.print("       TZ:");
+  tft.print("UTC Offset:");
   tft.setCursor(TDU_DISP_X, TDU_DISP_Y+TDU_OFFSET_Y*3);
-  tft.print(" Site Lat:");
+  tft.print("  Site Lat:");
   tft.setCursor(TDU_DISP_X, TDU_DISP_Y+TDU_OFFSET_Y*4);
-  tft.print("Site Long:");
+  tft.print(" Site Long:");
 
   // Draw Key Pad
   int z=0;
@@ -173,23 +173,23 @@ void SettingsScreen::updateSettingsStatus() {
   char tempReply[10];
   // show Local Time 24 Hr format
   commandWithReply(":GL#", tempReply); 
-  canvSettingsInsPrint.printRJ(TDU_DISP_X+TDU_OFFSET_X, TDU_DISP_Y, 80, 16, tempReply, false);
+  canvSettingsInsPrint.printRJ(TDU_DISP_X+TDU_OFFSET_X, TDU_DISP_Y-3, 80, 16, tempReply, false);
 
   // show Current Date
   commandWithReply(":GC#", tempReply); 
-  canvSettingsInsPrint.printRJ(TDU_DISP_X+TDU_OFFSET_X, TDU_DISP_Y+TDU_OFFSET_Y, 80, 16, tempReply, false);
+  canvSettingsInsPrint.printRJ(TDU_DISP_X+TDU_OFFSET_X, TDU_DISP_Y-3+TDU_OFFSET_Y, 80, 16, tempReply, false);
 
   // show TZ Offset
   commandWithReply(":GG#", tempReply); 
-  canvSettingsInsPrint.printRJ(TDU_DISP_X+TDU_OFFSET_X, TDU_DISP_Y+TDU_OFFSET_Y*2, 80, 16, tempReply, false);
+  canvSettingsInsPrint.printRJ(TDU_DISP_X+TDU_OFFSET_X, TDU_DISP_Y-3+TDU_OFFSET_Y*2, 80, 16, tempReply, false);
 
   // show Latitude
   commandWithReply(":Gt#", tempReply); 
-  canvSettingsInsPrint.printRJ(TDU_DISP_X+TDU_OFFSET_X, TDU_DISP_Y+TDU_OFFSET_Y*3, 80, 16, tempReply, false);
+  canvSettingsInsPrint.printRJ(TDU_DISP_X+TDU_OFFSET_X, TDU_DISP_Y-3+TDU_OFFSET_Y*3, 80, 16, tempReply, false);
 
   // show Longitude
   commandWithReply(":Gg#", tempReply); 
-  canvSettingsInsPrint.printRJ(TDU_DISP_X+TDU_OFFSET_X, TDU_DISP_Y+TDU_OFFSET_Y*4, 80, 16, tempReply, false);
+  canvSettingsInsPrint.printRJ(TDU_DISP_X+TDU_OFFSET_X, TDU_DISP_Y-3+TDU_OFFSET_Y*4, 80, 16, tempReply, false);
 }
 
 // Numpad handler, assign label to pressed button field array slot
@@ -604,7 +604,7 @@ bool SettingsScreen::touchPoll(uint16_t px, uint16_t py) {
       } 
     }
 
-    // Time Zone
+    // UTC Offset
     if (Tzselect) { // :SG[sHH]# 
       sprintf(sCmd, ":SG%c%c%c#", Tztext[0], Tztext[1], Tztext[2]);
       if (!commandBool(sCmd)) {

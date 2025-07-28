@@ -180,6 +180,7 @@ bool CmdDirect::processCommand(const char* cmd, char* response) {
   cmdError = static_cast<CmdError>(telescopeError);
 
   if (numericReply) {
+    //VF("MSG: cmdDirect: "); VL(cmdError);
     if (cmdError != CD_NONE && cmdError != CD_1) strcpy(response,"0"); else strcpy(response,"1");
     supressFrame = true;
   } 
@@ -188,7 +189,7 @@ bool CmdDirect::processCommand(const char* cmd, char* response) {
     strcat(response,"#");
   }
   
-  //VF("MSG: cmdDirect="); V(extractedCmd); V(parameter); VF(", reply = "); V(response);
+  //VF("MSG: cmdDirect="); V(extractedCmd); V(parameter); VF(", reply = "); VL(response);
 
   if (cmdError > CD_0) {
     if (strstr(extractedCmd, "GX") && strstr(parameter, "89")) {

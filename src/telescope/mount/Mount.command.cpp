@@ -72,7 +72,7 @@ bool Mount::command(char *reply, char *command, char *parameter, bool *supressFr
     // :GT#         Get tracking rate, 0.0 unless TrackingSidereal
     //              Returns: n.n# (OnStep returns more decimal places than LX200 standard)
     if (command[1] == 'T' && parameter[0] == 0)  {
-      if (trackingState == TS_NONE) strcpy(reply,"0"); else sprintF(reply, "%0.5f", siderealToHz(trackingRate));
+      if (trackingState == TS_NONE) strcpy(reply,"0.0"); else sprintF(reply, "%0.5f", siderealToHz(trackingRate));
       *numericReply = false;
     } else 
 

@@ -192,7 +192,7 @@
                                           //         Too fast motors stall/gears slam or too slow and sluggish in backlash.
 #define TRACK_AUTOSTART               OFF //    OFF, ON Start with tracking enabled.                                          Option
 #define TRACK_COMPENSATION_DEFAULT    OFF //    OFF, No compensation or REFRACTION, REFRACTION_DUAL, MODEL, MODEL_DUAL.       Option
-#define TRACK_COMPENSATION_MEMORY     OFF //    OFF, ON Remembers refraction/pointing model compensated tracking settings.    Option
+#define TRACK_COMPENSATION_MEMORY      ON //    OFF, ON Remembers refraction/pointing model compensated tracking settings.    Option
 
 // SLEWING BEHAVIOUR ------------------------------------------ see https://onstep.groups.io/g/main/wiki/Configuration_Mount#SLEWING
 #define SLEW_RATE_BASE_DESIRED        7.0 //    1.0, n. Desired slew rate in deg/sec. Adjustable at run-time from            <-Req'd

@@ -2,7 +2,7 @@
 
 **D**irect **D**rive Tele**Scope** Plugin for OnStepX - A servo controlled F4.5 13" ALT/AZ GoTo Newtonian Telescope
 
-* Author: Richard Benear 2021, 2022
+* Author: Richard Benear 2021, 2022, 2025
 
 The DDScopeX firmware implementation is a Plugin containing 17 different **Screens** (Pages)
 for **Control** and **Status** using OnStepX core FW authored by Howard Dutton. 

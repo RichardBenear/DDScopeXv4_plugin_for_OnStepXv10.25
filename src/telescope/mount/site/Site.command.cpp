@@ -144,16 +144,16 @@ bool Site::command(char *reply, char *command, char *parameter, bool *supressFra
     //            Change local standard date
     //            Return: 0 on failure, 1 on success
     if (command[1] == 'C') {
-      V("cmd="); VL(command);
-      V("parm="); VL(parameter);
+      //V("cmd="); VL(command);
+      //V("parm="); VL(parameter);
       GregorianDate local = calendars.julianToGregorian(UT1ToLocal(getDateTime()));
       if (strToDate(parameter, &local)) {
-        V("parm="); VL(parameter);
+        //V("parm="); VL(parameter);
         dateIsReady = true;
         setDateTime(localToUT1(calendars.gregorianToJulian(local)));        
         updateTLS();
       } else *commandError = CE_PARAM_FORM;
-       VL("error");
+       //VL("error");
     } else
 
     //  :SG[sHH]# or :SG[sHH:MM]# (where MM is 00, 30, or 45)
@@ -252,8 +252,13 @@ bool Site::command(char *reply, char *command, char *parameter, bool *supressFra
       char *conv_end;
       float f = strtod(&parameter[0], &conv_end);
       if (&parameter[0] == conv_end) f = NAN;
-      if (!setElevation(f)) *commandError = CE_PARAM_RANGE;
-      nv.updateBytes(NV_SITE_BASE + locationNumber*LocationSize, &location, LocationSize);
+      if (setElevation(f)) { 
+        if (!nv.updateBytes(NV_SITE_BASE + locationNumber*LocationSize, &location, LocationSize)) {
+          *commandError = CE_NV_WRITE_FAIL;
+        }
+      } else {
+        *commandError = CE_PARAM_RANGE; 
+      }
     } else return false;
   } else
 
@@ -276,7 +281,7 @@ bool Site::command(char *reply, char *command, char *parameter, bool *supressFra
       *numericReply = false;
     } else return false;
   } else return false;
-  
+
   return true;
 }
 

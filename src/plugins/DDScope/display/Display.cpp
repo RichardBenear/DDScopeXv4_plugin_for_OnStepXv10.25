@@ -800,6 +800,19 @@ void Display::updateCommonStatus() {
   //VLF("updating common status");
   showGpsStatus();
 
+  // Flash Slewing on all relavent screens when slewing
+  if (!mount.isSlewing()) {
+    tft.setFont(&Inconsolata_Bold8pt7b);
+    tft.fillRect(200, 28, 72, 14, BLACK);  // erase field
+    tft.setCursor(200, 38);
+    tft.print("        ");
+  } else {
+    tft.setFont(&Inconsolata_Bold8pt7b);
+    tft.fillRect(200, 28, 72, 14, BLACK); 
+    tft.setCursor(200, 38);
+    tft.print("Slewing ");
+  }
+
   // Flash tracking LED if mount is tracking
   if (mount.isTracking()) {
     if (trackLedOn) {

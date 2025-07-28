@@ -82,30 +82,16 @@ void LX200Handler::lxPoll() {
 
       const char* cmd = lxCmd.c_str();
       char lxResp[32] = "";
-
-      // Determine whether command is a setter (e.g., :Sr) or a getter (e.g., :GD)
-      bool isSetter = false;
-      if (strlen(cmd) > 3) {
-        // Setter commands typically begin with :S (Set) and have parameters
-        if (cmd[1] == 'S' && isalpha(cmd[2]) && cmd[strlen(cmd) - 1] == '#') {
-          isSetter = true;
-        }
+      if (!cmdDirect.processCommand(cmd, lxResp)) {
+        SERIAL_DEBUG.printf("Error processing Command: %s\n", lxCmd.c_str());
       }
-
-      if (isSetter) {
-        // Setter: Use commandBool
-        bool result = commandBool((char*)cmd);
-        snprintf(lxResp, sizeof(lxResp), "%d#", result ? 1 : 0);
-      } else {
-        // Getter: Use commandWithReply
-        commandWithReply(cmd, lxResp);
-        // Make sure '#' is appended
-        size_t len = strlen(lxResp);
-        if (len == 0 || lxResp[len - 1] != '#') {
-          if (len < sizeof(lxResp) - 1) {
-            lxResp[len] = '#';
-            lxResp[len + 1] = '\0';
-          }
+  
+      // Make sure '#' is appended
+      size_t len = strlen(lxResp);
+      if (len == 0 || lxResp[len - 1] != '#') {
+        if (len < sizeof(lxResp) - 1) {
+          lxResp[len] = '#';
+          lxResp[len + 1] = '\0';
         }
       }
 
