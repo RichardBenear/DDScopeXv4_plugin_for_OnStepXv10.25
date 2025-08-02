@@ -252,13 +252,8 @@ bool Site::command(char *reply, char *command, char *parameter, bool *supressFra
       char *conv_end;
       float f = strtod(&parameter[0], &conv_end);
       if (&parameter[0] == conv_end) f = NAN;
-      if (setElevation(f)) { 
-        if (!nv.updateBytes(NV_SITE_BASE + locationNumber*LocationSize, &location, LocationSize)) {
-          *commandError = CE_NV_WRITE_FAIL;
-        }
-      } else {
-        *commandError = CE_PARAM_RANGE; 
-      }
+      if (!setElevation(f)) *commandError = CE_PARAM_RANGE;
+      nv.updateBytes(NV_SITE_BASE + locationNumber*LocationSize, &location, LocationSize);
     } else return false;
   } else
 
